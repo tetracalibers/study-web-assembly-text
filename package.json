@@ -1,0 +1,7 @@
+{
+  "name": "study-web-assembly-text",
+  "private": true,
+  "devDependencies": {
+    "wat2wasm": "^3.0.0"
+  }
+}
