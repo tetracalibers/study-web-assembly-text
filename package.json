@@ -1,7 +1,11 @@
 {
   "name": "study-web-assembly-text",
   "private": true,
+  "scripts": {
+    "format": "prettier . --write"
+  },
   "devDependencies": {
+    "prettier": "^2.8.4",
     "wat2wasm": "^3.0.0"
   }
 }
