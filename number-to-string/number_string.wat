@@ -2,11 +2,12 @@
   (import "env" "print_string" (func $print_string (param i32 i32)))
   (import "env" "buffer" (memory 1))
   
-  ;; 16進数文字をすべて含んでいる文字配列
+  ;; 16進数文字をすべて含んでいる文字配列$digits
   (data (i32.const 128) "0123456789ABCDEF")
+  
   ;; 文字列データを保持するための文字配列$dec_string
   (data (i32.const 256) "               0")
-  ;; 文字列の長さ
+  ;; $dec_stringの長さ
   (global $dec_string_len i32 (i32.const 16))
   
   ;; 整数から10進数文字列を作成する関数
