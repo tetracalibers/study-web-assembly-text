@@ -15,6 +15,11 @@
   ;; $hex_stringの長さ
   (global $hex_string_len i32 (i32.const 16))
   
+  ;; 2進数文字列データを保持するための文字配列$bin_string
+  (data (i32.const 512) " 0000 0000 0000 0000 0000 0000 0000 0000")
+  ;; $bin_stringの長さ
+  (global $bin_string_len i32 (i32.const 40))
+  
   ;; 整数から10進数文字列を作成する関数
   (func $set_dec_string (param $num i32) (param $string_len i32)
     (local $index i32)
@@ -191,6 +196,94 @@
     i32.store8 offset=384
   )
   
+  ;; 整数から2進数文字列を作成する関数
+  (func $set_bin_string (param $num i32) (param $string_len i32)
+    (local $index i32)
+    (local $loops_remaining i32)
+    (local $nibble_bits i32)
+    
+    local.get $string_len
+    local.set $index
+    
+    ;; 32ビット整数を扱う上で、外側のループで処理しなければならないニブルの数を求める
+    i32.const 8 ;; 32ビットのニブルは8つ（32 / 4 = 8）
+    local.set $loops_remaining ;; 外側のループでニブルを区切る
+    
+    ;; スペースを追加するための外側のループ
+    (loop $bin_loop
+      (block $outer_break
+        ;; $index === 0 ならループから抜ける
+        local.get $index
+        i32.eqz
+        br_if $outer_break
+        
+        ;; 内側のループで処理しなければならないビットの数を求める
+        i32.const 4 ;; 各ニブルの4ビット
+        local.set $nibble_bits
+      
+        ;; 各行を処理するための内側のループ
+        (loop $nibble_loop
+          (block $nibble_break
+            ;; $index--
+            local.get $index
+            i32.const 1
+            i32.sub
+            local.set $index
+            
+            ;; 最後のビットを調べる
+            local.get $num
+            i32.const 1
+            i32.and ;; 最後のビットが1の場合は1、それ以外は0
+            
+            if
+              ;; 1の場合は、'1'を文字列に追加する
+              local.get $index
+              i32.const 49 ;; ASCIIの'1'
+              i32.store8 offset=512 ;; 位置 512 + $index に'1'を格納
+            else
+              ;; 0の場合は、'0'を文字列に追加する
+              local.get $index
+              i32.const 48 ;; ASCIIの'0'
+              i32.store8 offset=512 ;; 位置 512 + $index に'0'を格納
+            end
+            
+            ;; 最後の1ビットをシフトオフ（取り除く）
+            local.get $num
+            i32.const 1
+            i32.shr_u
+            local.set $num
+            
+            ;; $nibble_bits--
+            local.get $nibble_bits
+            i32.const 1
+            i32.sub
+            local.tee $nibble_bits
+            
+            ;; $nibbles_bits === 0 なら内側のループを抜ける
+            i32.eqz
+            br_if $nibble_break
+            
+            ;; 内側のループ続行
+            br $nibble_loop
+          )
+        )
+        
+        ;; スペース挿入位置を得るため、$index--
+        local.get $index
+        i32.const 1
+        i32.sub
+        local.tee $index
+        
+        ;; 行間のスペースを追加
+        i32.const 32 ;; ASCIIのスペース文字
+        i32.store8 offset=512 ;; 位置 512 + $index に格納
+        
+        ;; 外側のループ続行
+        br $bin_loop
+      )
+    )
+  )
+  
   (func (export "to_string") (param $num i32)
     ;; 文字列に変換したい数値と、左パディングを含む必要な文字列の長さを渡す
     (call $set_dec_string (local.get $num) (global.get $dec_string_len))
@@ -200,5 +293,9 @@
     ;; 16進数の場合
     (call $set_hex_string (local.get $num) (global.get $hex_string_len))
     (call $print_string (i32.const 384) (global.get $hex_string_len))
+    
+    ;; 2進数の場合
+    (call $set_bin_string (local.get $num) (global.get $bin_string_len))
+    (call $print_string (i32.const 512) (global.get $bin_string_len))
   )
 )
