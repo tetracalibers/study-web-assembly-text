@@ -5,7 +5,7 @@
   ;; 16進数文字をすべて含んでいる文字配列$digits
   (data (i32.const 128) "0123456789ABCDEF")
   
-  ;; 文字列データを保持するための文字配列$dec_string
+  ;; 10進数文字列データを保持するための文字配列$dec_string
   (data (i32.const 256) "               0")
   ;; $dec_stringの長さ
   (global $dec_string_len i32 (i32.const 16))
@@ -42,10 +42,11 @@
     ;; 下から1桁ずつ取り出して、文字列に追加していく繰り返し
     (loop $digit_loop
       (block $break
-        ;; $indexが文字列の終わりを指すようにし、0にデクリメント
+        ;; $indexが文字列の終わりを指すようにする
+        ;; $index === 0 ならループを抜ける
         local.get $index
         i32.eqz
-        br_if $break ;; $index === 0 ならループを抜ける
+        br_if $break
         
         ;; 最下位の桁の数字を求めて、$digit_valに格納
         local.get $num
