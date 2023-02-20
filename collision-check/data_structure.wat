@@ -10,7 +10,7 @@
   (global $radius_offset (import "env" "radius_offset") i32)
   (global $collision_offset (import "env" "collision_offset") i32)
   
-  // 衝突検出関数
+  ;; 衝突検出関数
   (func $collision_check
     (param $x1 i32) (param $y1 i32) (param $r1 i32)
     (param $x2 i32) (param $y2 i32) (param $r2 i32)
@@ -58,7 +58,7 @@
     i32.gt_u
   )
   
-  // 線形メモリからオブジェクトの属性を取り出す関数
+  ;; 線形メモリからオブジェクトの属性を取り出す関数
   (func $get_attr 
     (param $obj_base i32) (param $attr_offset i32)
     (result i32)
