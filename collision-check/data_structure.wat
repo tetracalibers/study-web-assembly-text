@@ -171,16 +171,16 @@
           if
             (call $set_collision (local.get $i_obj) (local.get $j_obj))
           end
-          
-          ;; j++
-          ;; 次に出現する (local.tee $j) で値を格納
-          (i32.add (local.get $j) (i32.const 1))
-          
-          ;; $j < $obj_count の場合は内側のループを繰り返す
-          ;; 今の円を、他の円と比較する
-          (br_if $inner_loop
-            (i32.lt_u (local.tee $j) (global.get $obj_count))
-          )
+        )
+        
+        ;; j++
+        ;; 次に出現する (local.tee $j) で値を格納
+        (i32.add (local.get $j) (i32.const 1))
+        
+        ;; $j < $obj_count の場合は内側のループを繰り返す
+        ;; 今の円を、他の円と比較する
+        (br_if $inner_loop
+          (i32.lt_u (local.tee $j) (global.get $obj_count))
         )
       )
       ;; $i++
