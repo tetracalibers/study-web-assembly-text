@@ -61,7 +61,7 @@ for (let i = 0; i < obj_count; i++) {
     const y = mem_i32[index + y_offset_i32].toString().padStart(2, " ")
     const r = mem_i32[index + radius_offset_i32].toString().padStart(2, " ")
     const i_str = i.toString().padStart(2, "0")
-    const c = mem_i32[index + collision_offset_i32].toString().padStart(2, " ")
+    const c = !!mem_i32[index + collision_offset_i32]
 
     if (c) {
       console.log(`obj[${i_str}] x=${x} y=${y} r=${r} collision=${c}`.red.bold)
