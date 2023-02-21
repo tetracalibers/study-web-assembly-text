@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Message</title>
+    <script src="./add_message.js"></script>
+    <style>
+      body {
+        font-family: "Courier New", Courier, monospace;
+      }
+      #add_message_button {
+        display: none;
+      }
+      #output {
+        width: 200px;
+        min-height: 300px;
+      }
+      .v-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .v-stack > * {
+        width: fit-content;
+        max-width: 200px;
+      }
+    </style>
+  </head>
+  <body onload="onPageLoad()">
+    <div class="v-stack">
+      <input type="number" id="a_val" value="0" />
+      <input type="number" id="b_val" value="0" />
+      <button id="add_message_button" type="button" onclick="onClickAddMessageButton()">
+        Add Values
+      </button>
+      <p id="output"></p>
+    </div>
+  </body>
+</html>
